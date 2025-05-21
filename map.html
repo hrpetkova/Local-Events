@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Civic Engagement Map - Vienna</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #1e4b91;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row-reverse;
+      max-width: 1200px;
+      margin: 1rem auto;
+      gap: 1rem;
+      justify-content: center;
+    }
+    #map, #calendar {
+      flex: 1 1 45%;
+      min-width: 300px;
+      height: 500px;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background-color: #eee;
+    }
+    .info-box {
+      padding: 1rem;
+      background-color: white;
+      margin: 1rem auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-width: 900px;
+    }
+    .filter-box {
+      max-width: 900px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .filter-box select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Local Civic Engagement in Vienna</h1>
+    <p>Explore local events, protests, and democratic initiatives</p>
+  </header>
+
+  <div class="filter-box">
+    <label for="event-filter">Filter by event type: </label>
+    <select id="event-filter">
+      <option value="all">All</option>
+      <option value="protest">Protest</option>
+      <option value="meeting">Town Hall Meeting</option>
+      <option value="debate">Debate</option>
+    </select>
+  </div>
+
+  <div class="container">
+    <div id="map"></div>
+    <div id="calendar"></div>
+  </div>
+
+  <div class="info-box">
+    <h2>About This Project</h2>
+    <p>This map highlights civic activities such as protests, community meetings, and NGOs in Vienna. It is built using open data and open-source tools to promote democratic participation at the local level.</p>
+  </div>
+
+  <footer>
+    &copy; 2025 Local Civic Engagement Map | Data from <a href="https://data.gv.at" target="_blank">data.gv.at</a> | Map by Leaflet
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+  <script>
+    const map = L.map('map').setView([48.2082, 16.3738], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const events = [
+      { title: 'Protest for Housing', type: 'protest', date: '2025-04-15', coords: [48.2082, 16.3738] },
+      { title: 'Town Hall - District 5', type: 'meeting', date: '2025-04-18', coords: [48.2000, 16.3600] },
+      { title: 'Public Debate on Transit', type: 'debate', date: '2025-04-20', coords: [48.2100, 16.3900] }
+    ];
+
+    events.forEach(e => {
+      L.marker(e.coords).addTo(map).bindPopup(`<b>${e.title}</b><br>${e.type.charAt(0).toUpperCase() + e.type.slice(1)}`);
+    });
+
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: events.map(e => ({ title: e.title, date: e.date }))
+    });
+    calendar.render();
+
+    const filter = document.getElementById('event-filter');
+    filter.addEventListener('change', () => {
+      const selected = filter.value;
+      map.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+          map.removeLayer(layer);
+        }
+      });
+      events
+        .filter(e => selected === 'all' || e.type === selected)
+        .forEach(e => {
+          L.marker(e.coords).addTo(map).bindPopup(`<b>${e.title}</b><br>${e.type.charAt(0).toUpperCase() + e.type.slice(1)}`);
+        });
+    });
+  </script>
+</body>
+</html>
