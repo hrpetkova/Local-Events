@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Panel</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 2rem;
+    }
+    header {
+      background: #1e4b91;
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logout, .home-link {
+      background: white;
+      color: #1e4b91;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+    .main-grid {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    form {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      flex: 1;
+      min-width: 300px;
+    }
+    form input, form select, form button {
+      margin-bottom: 0.5rem;
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    form button {
+      background: #1e4b91;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #previewMap {
+      height: 400px;
+      min-width: 300px;
+      flex: 1;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .event-list {
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+    }
+    .event-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .event-item:last-child {
+      border-bottom: none;
+    }
+    .status {
+      font-weight: bold;
+      font-size: 0.9rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: white;
+    }
+    .status.pending { background: #ffc107; }
+    .status.approved { background: #28a745; }
+    .status.rejected { background: #dc3545; }
+  </style>
+</head>
+<body>
+  <script>
+    const user = localStorage.getItem('currentUser');
+    if (!user) {
+      alert('You must be logged in to view this page.');
+      window.location.href = 'login.html';
+    }
+    if (user === 'admin') {
+      window.location.href = 'admin.html';
+    }
+  </script>
+
+  <header>
+    <h2>Welcome, <span id="userName"></span></h2>
+    <div>
+      <a class="home-link" href="index.html">Home</a>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <form id="eventForm">
+      <input type="text" id="title" placeholder="Event Title" required />
+      <select id="type" required>
+        <option value="">Select Type</option>
+        <option value="protest">Protest</option>
+        <option value="meeting">Town Hall Meeting</option>
+        <option value="debate">Debate</option>
+      </select>
+      <input type="date" id="date" required />
+      <input type="number" id="lat" placeholder="Latitude" step="any" required />
+      <input type="number" id="lng" placeholder="Longitude" step="any" required />
+      <button type="submit">Submit Event</button>
+    </form>
+    <div id="previewMap"></div>
+  </div>
+
+  <div class="event-list" id="eventList">
+    <h3>Your Submitted Events:</h3>
+    <div id="eventsContainer"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    document.getElementById('userName').textContent = user;
+
+    function logout() {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'login.html';
+    }
+
+    const submitted = JSON.parse(localStorage.getItem('submittedEvents')) || [];
+    const container = document.getElementById('eventsContainer');
+    const userEvents = submitted.filter(e => e.submittedBy === user);
+
+    if (userEvents.length === 0) {
+      container.innerHTML = '<p>You have not submitted any events yet.</p>';
+    } else {
+      userEvents.forEach(event => {
+        const div = document.createElement('div');
+        div.className = 'event-item';
+        div.innerHTML = `
+          <strong>${event.title}</strong> (${event.type})<br>
+          Date: ${event.date}<br>
+          Location: ${event.coords.join(', ')}<br>
+          <span class="status ${event.status}">Status: ${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const type = document.getElementById('type').value;
+      const date = document.getElementById('date').value;
+      const lat = parseFloat(document.getElementById('lat').value);
+      const lng = parseFloat(document.getElementById('lng').value);
+
+      const newEvent = {
+        title,
+        type,
+        date,
+        coords: [lat, lng],
+        submittedBy: user,
+        status: 'pending'
+      };
+
+      const pending = JSON.parse(localStorage.getItem('pendingEvents')) || [];
+      const submitted = JSON.parse(localStorage.getItem('submittedEvents')) || [];
+
+      pending.push(newEvent);
+      submitted.push(newEvent);
+
+      localStorage.setItem('pendingEvents', JSON.stringify(pending));
+      localStorage.setItem('submittedEvents', JSON.stringify(submitted));
+
+      alert('Event submitted successfully and is pending approval.');
+      this.reset();
+      window.location.reload();
+    });
+
+    const map = L.map('previewMap').setView([48.2082, 16.3738], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+    ['lat', 'lng'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const lat = parseFloat(document.getElementById('lat').value);
+        const lng = parseFloat(document.getElementById('lng').value);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          if (marker) map.removeLayer(marker);
+          marker = L.marker([lat, lng]).addTo(map).bindPopup('Your event location').openPopup();
+          map.setView([lat, lng], 13);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
