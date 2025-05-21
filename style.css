@@ -1,0 +1,60 @@
+body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: #1e4b91;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row-reverse;
+      max-width: 1200px;
+      margin: 1rem auto;
+      gap: 1rem;
+      justify-content: center;
+    }
+    #map, #calendar {
+      flex: 1 1 45%;
+      min-width: 300px;
+      height: 500px;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background-color: #eee;
+    }
+    .info-box {
+      padding: 1rem;
+      background-color: white;
+      margin: 1rem auto;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-width: 900px;
+    }
+    .filter-box {
+      max-width: 900px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .filter-box select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
