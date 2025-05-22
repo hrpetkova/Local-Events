@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Fridays for Future",
+    "type": "protest",
+    "date": "2025-06-15",
+    "coords": [48.2082, 16.3738],
+    "submittedBy": "laura",
+    "status": "approved"
+  },
+  {
+    "title": "Local Election Info",
+    "type": "meeting",
+    "date": "2025-06-20",
+    "coords": [48.2002, 16.3628],
+    "submittedBy": "marco",
+    "status": "approved"
+  }
+]
