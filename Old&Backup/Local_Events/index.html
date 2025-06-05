@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Public Civic Events</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+  body { font-family: 'Open Sans', sans-serif; margin: 0; background: #f2f2f2; }
+  header {
+    background: #FF8FA3;
+    color: white;
+    padding: 1rem;
+    font-family: 'Fredoka', cursive;
+  }
+  header h1 {
+    margin: 0.5rem 0;
+    font-size: 1.8rem;
+  }
+  #navbar {
+    font-size: 0.95rem;
+    text-align: right;
+    margin-top: -2rem;
+  }
+  #navbar a {
+    color: white;
+    margin: 0 0.5rem;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  #controls, #recurringControls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border-radius: 8px;
+    margin: 0.5rem auto;
+    max-width: 850px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  }
+
+  #controls::before, #recurringControls::before {
+    content: attr(data-title);
+    width: 100%;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    text-align: left;
+    margin-bottom: 0.2rem;
+    font-family: 'Fredoka', cursive;
+  }
+
+  #controls label, #recurringControls label {
+    background: #f9f9f9;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  #map, #calendar {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 45%;
+    min-width: 300px;
+    height: 500px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+ </style>
+
+</head>
+<body>
+
+<header>
+  <div style="display:flex; justify-content:space-between; align-items:center; padding: 0 1rem;">
+    <h1>Public Civic Events Map</h1>
+    <nav id="navbar"></nav>
+  </div>
+  <p style="margin: 0; font-size: 0.85rem; text-align:center">Loaded from localStorage (approved events) & events.geojson</p>
+</header>
+
+<div id="controls"></div>
+<div id="recurringControls"></div>
+<div class="container">
+  <div id="map"></div>
+  <div id="calendar"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+const user = localStorage.getItem('currentUser');
+const nav = document.getElementById('navbar');
+
+if (user === 'admin') {
+  nav.innerHTML = `
+    <a href="index.html">Home</a> |
+    <a href="admin.html">Admin Panel</a> |
+    <a href="#" onclick="logout()">Logout (${user})</a>`;
+} else if (user) {
+  nav.innerHTML = `
+    <a href="index.html">Home</a> |
+    <a href="user.html">User Panel</a> |
+    <a href="#" onclick="logout()">Logout (${user})</a>`;
+} else {
+  nav.innerHTML = `
+    <a href="index.html">Home</a> |
+    <a href="login.html">Login</a> |
+    <a href="register.html">Register</a>`;
+}
+
+function logout() {
+  localStorage.removeItem('currentUser');
+  window.location.href = 'login.html';
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  return d.toLocaleString('en-GB', {
+    year: 'numeric', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+}
+
+const map = L.map('map').setView([48.2082, 16.3738], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+const categoryColors = {
+  initiative: '#007BFF',
+  protest: '#FF4136',
+  pol_education: '#28a745',
+  workshop: '#fd7e14',
+  participation: '#6f42c1',
+  election: '#ffc107',
+  default: '#6c757d'
+};
+
+const recurringColors = {
+  one_time: '#666',
+  daily: '#1abc9c',
+  weekly: '#9b59b6',
+  monthly: '#e67e22'
+};
+
+let allMarkers = [];
+let allEvents = [];
+let categorySet = new Set();
+let recurringSet = new Set();
+let markerById = {};
+
+function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
+  const color = categoryColors[category] || categoryColors.default;
+  const marker = L.circleMarker([coords[0], coords[1]], {
+    radius: 7,
+    color: color,
+    fillColor: color,
+    fillOpacity: 0.85
+  }).bindPopup(`
+    <strong>${props.title}</strong><br>
+    <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>
+    <span style="color:${color}; font-weight:bold;">${category}</span><br>
+    ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''}
+    ${props.weblink ? `<a href="${props.weblink}" target="_blank">🔗 More info</a><br>` : ''}
+    ${props.description ? `<p>${props.description}</p>` : ''}
+  `);
+  marker.featureCategory = category;
+  marker.featureRecurring = props.reccuring || 'one_time';
+  marker.eventId = props.objectId || props.id;
+  marker.addTo(map);
+  allMarkers.push(marker);
+  markerById[marker.eventId] = marker;
+
+  allEvents.push({
+    id: marker.eventId,
+    title: props.title,
+    start: props.timestamp_start,
+    end: props.timestamp_end,
+    allDay: false,
+    display: 'block',
+    color: color,
+    textColor: '#fff',
+    extendedProps: {
+      id: marker.eventId,
+      category,
+      reccuring: props.reccuring || 'one_time'
+    }
+  });
+  categorySet.add(category);
+  recurringSet.add(props.reccuring || 'one_time');
+}
+
+const storedEvents = JSON.parse(localStorage.getItem('submittedEvents')) || [];
+storedEvents.filter(e => e.status === 'approved').forEach(e => {
+  const category = e.category || 'default';
+  addEventToMapAndCalendar(e, e.coords, category);
+});
+
+fetch('events.geojson')
+  .then(res => res.json())
+  .then(geojson => {
+    geojson.features.forEach(f => {
+      const props = f.properties;
+      const coords = f.geometry.coordinates;
+      const category = props.category || 'default';
+      addEventToMapAndCalendar(props, [coords[1], coords[0]], category);
+    });
+
+    const controlDiv = document.getElementById('controls');
+    const recurringDiv = document.getElementById('recurringControls');
+    controlDiv.setAttribute('data-title', 'Filter by Category');
+    recurringDiv.setAttribute('data-title', 'Filter by Frequency');
+
+    categorySet.forEach(cat => {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = true;
+      checkbox.id = `cat-${cat}`;
+      checkbox.dataset.category = cat;
+
+      const label = document.createElement('label');
+      label.htmlFor = `cat-${cat}`;
+      label.innerHTML = `<span style="color:${categoryColors[cat] || categoryColors.default};">■</span> ${cat}`;
+
+      checkbox.addEventListener('change', updateFilters);
+      controlDiv.appendChild(checkbox);
+      controlDiv.appendChild(label);
+    });
+
+    recurringSet.forEach(rec => {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = true;
+      checkbox.id = `rec-${rec}`;
+      checkbox.dataset.rec = rec;
+
+      const label = document.createElement('label');
+      label.htmlFor = `rec-${rec}`;
+      label.innerHTML = `<span style="color:${recurringColors[rec] || '#999'};">⬤</span> ${rec}`;
+
+      checkbox.addEventListener('change', updateFilters);
+      recurringDiv.appendChild(checkbox);
+      recurringDiv.appendChild(label);
+    });
+
+    function updateFilters() {
+      const activeCategories = Array.from(document.querySelectorAll('#controls input:checked')).map(el => el.dataset.category);
+      const activeRecs = Array.from(document.querySelectorAll('#recurringControls input:checked')).map(el => el.dataset.rec);
+
+      allMarkers.forEach(m => {
+        if (activeCategories.includes(m.featureCategory) && activeRecs.includes(m.featureRecurring)) {
+          m.addTo(map);
+        } else {
+          map.removeLayer(m);
+        }
+      });
+
+      calendar.removeAllEvents();
+      allEvents.forEach(evt => {
+        if (activeCategories.includes(evt.extendedProps.category) && activeRecs.includes(evt.extendedProps.reccuring)) {
+          calendar.addEvent(evt);
+        }
+      });
+    }
+
+    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+      initialView: 'dayGridMonth',
+      events: allEvents,
+      eventClick: function(info) {
+        const marker = markerById[info.event.id];
+        if (marker) {
+          map.setView(marker.getLatLng(), 16);
+          marker.openPopup();
+        }
+      }
+    });
+
+    calendar.render();
+  });
+</script>
+</body>
+</html>

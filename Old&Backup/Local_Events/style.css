@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Open+Sans&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  background: #f2f2f2;
+}
+
+header {
+  background: #FF8FA3;
+  color: white;
+  padding: 1rem;
+  font-family: 'Fredoka', cursive;
+}
+
+header h1 {
+  margin: 0.5rem 0;
+  font-size: 1.8rem;
+}
+
+#navbar {
+  font-size: 0.95rem;
+  text-align: right;
+  margin-top: -2rem;
+}
+
+#navbar a {
+  color: white;
+  margin: 0 0.5rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#controls {
+  text-align: center;
+  margin: 0.5rem;
+}
+
+#controls label {
+  margin-right: 1rem;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+#map, #calendar {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 45%;
+  min-width: 300px;
+  height: 500px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}

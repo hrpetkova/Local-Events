@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Public Civic Engagement Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+    }
+    header {
+      background: #1e4b91;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    #map, #calendar {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      width: 45%;
+      min-width: 300px;
+      height: 500px;
+    }
+    footer {
+      background: #eee;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Public Civic Engagement Map</h1>
+    <p>View officially approved events in Vienna</p>
+  </header>
+
+  <div class="container">
+    <div id="map"></div>
+    <div id="calendar"></div>
+  </div>
+
+  <footer>
+    &copy; 2025 Civic Engagement Platform | Data by community | Map by Leaflet
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const approvedEvents = JSON.parse(localStorage.getItem('approvedEvents')) || [];
+
+      const map = L.map('map').setView([48.2082, 16.3738], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      const markerMap = new Map();
+
+      const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        initialView: 'dayGridMonth',
+        events: approvedEvents.map((e, i) => {
+          const id = 'event-' + i;
+          e._id = id;
+          return {
+            id,
+            title: `${e.title} (${e.type})`,
+            date: e.date
+          };
+        }),
+        eventClick: function(info) {
+          const marker = markerMap.get(info.event.id);
+          if (marker) {
+            marker.openPopup();
+            map.setView(marker.getLatLng(), 14);
+          }
+          calendar.select(info.event.start);
+        }
+      });
+      calendar.render();
+
+      approvedEvents.forEach((event, i) => {
+        const id = 'event-' + i;
+        event._id = id;
+
+        const marker = L.marker(event.coords).addTo(map)
+          .bindPopup(`<strong>${event.title}</strong><br>${event.type}<br>${event.date}`);
+
+        markerMap.set(id, marker);
+
+        marker.on('click', () => {
+          calendar.gotoDate(event.date);
+          calendar.select(event.date);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
