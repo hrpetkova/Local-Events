@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/admin.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+<script>
+  const user = localStorage.getItem('currentUser');
+  if (user !== 'admin') {
+    alert('Access denied. Admins only.');
+    window.location.href = 'login.html';
+  }
+</script>
+
+<header>
+  <h2>Welcome, <span id="adminName"></span></h2>
+  <div>
+    <a class="button" href="../index.html">Home</a>
+    <button class="button" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div style="margin-bottom: 1rem;">
+  <button class="button" onclick="exportVisibleEvents()">Export Visible Events (CSV)</button>
+  <button class="button" onclick="exportVisibleEventsJSON()">Export Visible Events (JSON)</button>
+  <button class="button" onclick="copyVisibleEventsToClipboard()">Copy Visible Events (JSON)</button>
+  <p id="summaryCounts" style="margin: 0.5rem 0;"><em>Loading counts...</em></p>
+  <label for="statusFilter"><strong>Filter by status:</strong></label>
+  <select id="statusFilter">
+    <option value="all">All</option>
+    <option value="pending">Pending</option>
+    <option value="approved">Approved</option>
+    <option value="rejected">Rejected</option>
+  </select>
+</div>
+
+<div id="eventList"></div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="../scripts/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced User Panel</title>
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/user.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <script>
+    const user = localStorage.getItem('currentUser');
+    if (!user) { alert('Login required'); window.location.href = 'login.html'; }
+  </script>
+
+  <header>
+    <h2>Submit Civic Event</h2>
+    <div><a href="index.html" style="color:white;font-weight:bold;">Home</a></div>
+  </header>
+
+  <div class="main-grid">
+    <form id="eventForm">
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="description" placeholder="Description" required></textarea>
+      <input type="text" id="host" placeholder="Host / Organization" required />
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="protest">Protest</option>
+        <option value="initiative">Initiative</option>
+        <option value="participation">Participation</option>
+        <option value="election">Election</option>
+        <option value="pol_education">Political Education</option>
+        <option value="workshop">Workshop</option>
+      </select>
+      <select id="reccuring" required>
+        <option value="">Recurring</option>
+        <option value="one_time">One Time</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+      <label>Start Date and Time:</label>
+      <input type="date" id="startDate" required />
+      <input type="time" id="startTime" required />
+      <label>End Date and Time:</label>
+      <input type="date" id="endDate" required />
+      <input type="time" id="endTime" required />
+      <input type="url" id="weblink" placeholder="External link (optional)" />
+      <p><strong>Click on the map to select location</strong></p>
+      <button type="submit">Submit Event</button>
+    </form>
+    <div id="previewMap"></div>
+  </div>
+
+  <div class="event-list" id="eventHistory">
+    <h3>Your Submitted Events</h3>
+    <div id="eventItems"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="../scripts/user.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+#map, #calendar {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 45%;
+  min-width: 300px;
+  height: 500px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+#controls {
+  text-align: center;
+  margin: 0.5rem;
+}
+
+#controls, #recurringControls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border-radius: 8px;
+  margin: 0.5rem auto;
+  max-width: 850px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+#controls::before, #recurringControls::before {
+  content: attr(data-title);
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #333;
+  text-align: left;
+  margin-bottom: 0.2rem;
+  font-family: 'Fredoka', cursive;
+}
+
+#controls label, #recurringControls label {
+  margin-right: 1rem;
+  background: #f9f9f9;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
