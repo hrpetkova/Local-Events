@@ -1,3 +1,16 @@
+p {
+  margin: 0; 
+  font-size: 0.85rem; 
+  text-align: center;
+}
+
+header div {
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+  padding: 0 1rem;
+}
+
 #map, #calendar {
   background: white;
   border-radius: 8px;

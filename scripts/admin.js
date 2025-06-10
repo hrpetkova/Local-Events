@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-document.getElementById('adminName').textContent = user;
+    document.getElementById('adminName').textContent = user;
 });
 
+//parsing the data from localstorage to be able to use it in our filters
 const submitted = JSON.parse(localStorage.getItem('submittedEvents')) || [];
 const approved = JSON.parse(localStorage.getItem('approvedEvents')) || [];
 const pending = JSON.parse(localStorage.getItem('pendingEvents')) || [];
 const combined = [...submitted, ...approved.filter(ev => !submitted.some(s => JSON.stringify(s) === JSON.stringify(ev)))];
 
+//the leaflet map to view our data
 const map = L.map('map').setView([48.2082, 16.3738], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: '&copy; OpenStreetMap contributors'
@@ -14,52 +16,57 @@ attribution: '&copy; OpenStreetMap contributors'
 let marker;
 
 function renderEvents() {
-updateSummary();
-const filter = document.getElementById('statusFilter').value;
-const list = document.getElementById('eventList');
-list.innerHTML = '';
-combined.filter(event => filter === 'all' || event.status === filter)
-    .forEach((event, index) => {
-    const div = document.createElement('div');
-    div.className = 'event';
-    div.innerHTML = `
-        <strong>${event.title}</strong> (${event.type})<br>
-        <em>Submitted by: ${event.submittedBy || 'Unknown'}</em><br>
-        Date: ${event.date}<br>
-        Location: ${event.coords.join(', ')}<br>
-        <span class="status ${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span><br><br>
-    `;
-    if (event.status === 'pending') {
-        const approveBtn = document.createElement('button');
-        approveBtn.className = 'approve';
-        approveBtn.textContent = 'Approve';
-        approveBtn.onclick = () => updateStatus(index, 'approved');
+    updateSummary();
+    const filter = document.getElementById('statusFilter').value;
+    const list = document.getElementById('eventList');
+    list.innerHTML = '';
+    combined.filter(event => filter === 'all' || event.status === filter)
+        .forEach((event, index) => {
+        const div = document.createElement('div');
+        div.className = 'event';
+        //display the event in the page, inject the html through js
+        div.innerHTML = `
+            <strong>${event.title}</strong> (${event.type})<br>
+            <em>Submitted by: ${event.submittedBy || 'Unknown'}</em><br>
+            Date: ${event.date}<br>
+            Location: ${event.coords.join(', ')}<br>
+            <span class="status ${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span><br><br>
+        `;
+        //add admin functions to the events
+        if (event.status === 'pending') {
+            const approveBtn = document.createElement('button');
+            approveBtn.className = 'approve';
+            approveBtn.textContent = 'Approve';
+            approveBtn.onclick = () => updateStatus(index, 'approved');
 
-        const rejectBtn = document.createElement('button');
-        rejectBtn.className = 'reject';
-        rejectBtn.textContent = 'Reject';
-        rejectBtn.onclick = () => updateStatus(index, 'rejected');
+            const rejectBtn = document.createElement('button');
+            rejectBtn.className = 'reject';
+            rejectBtn.textContent = 'Reject';
+            rejectBtn.onclick = () => updateStatus(index, 'rejected');
 
-        div.appendChild(approveBtn);
-        div.appendChild(rejectBtn);
-    }
+            div.appendChild(approveBtn);
+            div.appendChild(rejectBtn);
+        }
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete';
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.onclick = () => {
-        if (confirm('Are you sure you want to delete this event?')) deleteEvent(index);
-    };
-    const mapBtn = document.createElement('button');
-    mapBtn.textContent = 'Show on Map';
-    mapBtn.onclick = () => zoomTo(event.coords);
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete';
+        deleteBtn.textContent = 'Delete';
+        //confirmation pop-up before deleting the eventss
+        deleteBtn.onclick = () => {
+            if (confirm('Are you sure you want to delete this event?')) deleteEvent(index);
+        };
+        const mapBtn = document.createElement('button');
+        mapBtn.textContent = 'Show on Map';
+        mapBtn.onclick = () => zoomTo(event.coords);
 
-    div.appendChild(mapBtn);
-    div.appendChild(deleteBtn);
-    list.appendChild(div);
+        //make the buttons do their thing
+        div.appendChild(mapBtn);
+        div.appendChild(deleteBtn);
+        list.appendChild(div);
     });
 }
 
+//update the status of the event in localstorage
 function updateStatus(index, status) {
     submitted[index].status = status;
     if (status === 'approved') approved.push(submitted[index]);
@@ -73,6 +80,7 @@ function updateStatus(index, status) {
     updateSummary();
 }
 
+//delete the event from the localsotrage
 function deleteEvent(index) {
     const event = submitted[index];
     submitted.splice(index, 1);
@@ -84,12 +92,14 @@ function deleteEvent(index) {
     renderEvents();
 }
 
+//to set the map to the event
 function zoomTo(coords) {
     if (marker) map.removeLayer(marker);
     marker = L.marker(coords).addTo(map).bindPopup('Event location').openPopup();
     map.setView(coords, 14);
 }
 
+//to update the info at the top about the events that require attention
 function updateSummary() {
     const all = combined;
     const pendingCount = all.filter(e => e.status === 'pending').length;
@@ -101,6 +111,7 @@ function updateSummary() {
     document.getElementById('summaryCounts').textContent = summary;
 }
 
+//export the events to csv
 function exportVisibleEvents() {
     const filter = document.getElementById('statusFilter').value;
     const filtered = combined.filter(e => filter === 'all' || e.status === filter);
@@ -120,6 +131,7 @@ function exportVisibleEvents() {
     URL.revokeObjectURL(url);
 }
 
+//export the events to json
 function exportVisibleEventsJSON() {
     const filter = document.getElementById('statusFilter').value;
     const filtered = combined.filter(e => filter === 'all' || e.status === filter);
@@ -133,6 +145,7 @@ function exportVisibleEventsJSON() {
     URL.revokeObjectURL(url);
 }
 
+//copy the events to clipboard of admin
 function copyVisibleEventsToClipboard() {
     const filter = document.getElementById('statusFilter').value;
     const filtered = combined.filter(e => filter === 'all' || e.status === filter);
@@ -154,6 +167,7 @@ document.getElementById('statusFilter').addEventListener('change', () => {
     renderMapPoints();
 });
 
+//display the events on the map
 function renderMapPoints() {
     const filter = document.getElementById('statusFilter').value;
     map.eachLayer(layer => {

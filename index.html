@@ -11,20 +11,21 @@
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <header>
-    <div style="display:flex; justify-content:space-between; align-items:center; padding: 0 1rem;">
+    <div>
       <h1>Public Civic Events Map</h1>
-      <nav id="navbar"></nav>
+      <nav id="navbar"></nav>  <!-- handeled by JS -->
     </div>
-    <p style="margin: 0; font-size: 0.85rem; text-align:center">Loaded from localStorage (approved events) & events.geojson</p>
+    <p>Loaded from localStorage (approved events) & events.geojson</p>
   </header>
 
-  <div id="controls"></div>
-  <div id="recurringControls"></div>
+  <div id="controls"></div> <!-- the filter controls for type of event -->
+  <div id="recurringControls"></div> <!-- the filter controls for frequency of event -->
   <div class="container">
-    <div id="map"></div>
-    <div id="calendar"></div>
+    <div id="map"></div> <!-- leaflet map -->
+    <div id="calendar"></div> <!-- calendar.io -->
   </div>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>

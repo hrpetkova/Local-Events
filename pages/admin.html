@@ -11,12 +11,15 @@
 </head>
 <body>
 <script>
+  //check if admin is logged in, if not redirect to logn
   const user = localStorage.getItem('currentUser');
   if (user !== 'admin') {
     alert('Access denied. Admins only.');
     window.location.href = 'login.html';
   }
 </script>
+
+<div id="todo">TO-DO: change the css to fit with the style of the website</div>
 
 <header>
   <h2>Welcome, <span id="adminName"></span></h2>
@@ -25,13 +28,14 @@
     <button class="button" onclick="logout()">Logout</button>
   </div>
 </header>
-
-<div style="margin-bottom: 1rem;">
-  <button class="button" onclick="exportVisibleEvents()">Export Visible Events (CSV)</button>
+<div>
+  <button class="button" onclick="exportVisibleEvents()">Export Visible Events (CSV)</button> 
   <button class="button" onclick="exportVisibleEventsJSON()">Export Visible Events (JSON)</button>
   <button class="button" onclick="copyVisibleEventsToClipboard()">Copy Visible Events (JSON)</button>
-  <p id="summaryCounts" style="margin: 0.5rem 0;"><em>Loading counts...</em></p>
-  <label for="statusFilter"><strong>Filter by status:</strong></label>
+  <p id="summaryCounts"></p> <!-- how many events need action -->
+  <label for="statusFilter">  <!-- filter by admin action -->
+    <strong>Filter by status:</strong>
+  </label>
   <select id="statusFilter">
     <option value="all">All</option>
     <option value="pending">Pending</option>
@@ -40,7 +44,7 @@
   </select>
 </div>
 
-<div id="eventList"></div>
+<div id="eventList"></div> 
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
