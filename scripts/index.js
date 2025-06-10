@@ -79,7 +79,7 @@ function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
         <strong>${props.title}</strong><br>
         <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>
         <span style="color:${color}; font-weight:bold;">${category}</span><br>
-        ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''}
+        <!-- ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''} -->
         ${props.weblink ? `<a href="${props.weblink}" target="_blank">🔗 More info</a><br>` : ''}
         ${props.description ? `<p>${props.description}</p>` : ''}
     `);
@@ -92,8 +92,9 @@ function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
     markerById[marker.eventId] = marker;
     
     //incase the category is intiative it skips adding them to the calendar, due to lag and overload of data
-    if (category !== 'initiative') {
-        allEvents.push({
+    if ((props.reccuring === 'initiative') || (category === 'initative')) {} 
+    else {
+            allEvents.push({
             id: marker.eventId,
             title: props.title,
             start: props.timestamp_start,
