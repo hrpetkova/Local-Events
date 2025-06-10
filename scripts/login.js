@@ -1,4 +1,5 @@
-//the user system works with local storage. technically not a good solution, since that info shouldnt be on the users system, but since we are working without a proper database it should be fine
+//the user system works with local storage. 
+//technically not a good solution, since that info shouldnt be on the users system, but since we are working without a proper database it should be fine
 let users = JSON.parse(localStorage.getItem('users')) || [];
 const adminExists = users.some(u => u.username === 'admin');
 //default admin login info

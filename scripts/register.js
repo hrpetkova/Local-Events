@@ -1,4 +1,4 @@
-// Ensure admin is always registered
+//ensure admin is always registered
 const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
 const adminExists = existingUsers.some(u => u.username === 'admin');
 if (!adminExists) {
