@@ -1,60 +1,128 @@
-    body { 
-        font-family: Arial, sans-serif; 
-        padding: 2rem; 
-        background: #f4f4f4; 
+body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      background: #e8f5e9;
+      color: #2e7d32;
     }
 
-    header { 
-        background: #1e4b91; 
-        color: white; 
-        padding: 1rem; 
-        border-radius: 6px; 
-        margin-bottom: 2rem; 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
+    header {
+      background: #66bb6a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-family: 'Fredoka', cursive;
     }
 
-    .main-grid { 
-        display: flex; 
-        gap: 2rem; 
-        flex-wrap: wrap; 
-    }
-    form, #previewMap, .event-list { 
-        flex: 1; 
-        min-width: 300px; 
-        background: white; 
-        border-radius: 6px; 
-        padding: 1rem; 
-        box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+    header h1 {
+      margin: 0.5rem 0;
+      font-size: 2rem;
     }
 
-    input, select, textarea, button { 
-        width: 100%; 
-        margin-bottom: 0.5rem; 
-        padding: 0.5rem; 
-        font-size: 1rem; 
+    #navbar {
+      font-size: 0.9rem;
+      text-align: center;
+      margin-bottom: 1rem;
     }
 
-    button { 
-        background: #1e4b91; 
-        color: white; 
-        border: none; 
-        border-radius: 4px; 
-        cursor: pointer; 
+    #navbar a {
+      color: white;
+      margin: 0 0.8rem;
+      text-decoration: none;
+      font-weight: bold;
     }
 
-    .event-item { 
-        border-bottom: 1px solid #ddd; 
-        padding: 0.5rem 0; 
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    .event-item:last-child { 
-        border-bottom: none; 
+    h2 {
+      font-family: 'Fredoka', cursive;
+      color: #388e3c;
     }
 
-    .no-events { color: #888; 
-        font-style: italic; 
-        margin-top: 1rem; 
+    .event {
+      border: 1px solid #c8e6c9;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      background: #f1f8e9;
     }
-    
+
+    .event h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #2e7d32;
+    }
+
+    .event p {
+      margin: 0.3rem 0;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #43a047;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #388e3c;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .flex-form-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    #map {
+      flex: 1;
+      min-width: 300px;
+      height: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    form {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    form input, form textarea, form select, form button {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    form button {
+      background-color: #43a047;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #2e7d32;
+    }
