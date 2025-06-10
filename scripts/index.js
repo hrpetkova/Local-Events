@@ -21,8 +21,8 @@ nav.innerHTML = `
 
 //logout function goes to login page
 function logout() { 
-localStorage.removeItem('currentUser');
-window.location.href = 'pages/login.html';
+    localStorage.removeItem('currentUser');
+    window.location.href = 'pages/login.html';
 }
 
 //formats the date of the events in the map to be easy to read
@@ -38,26 +38,26 @@ return d.toLocaleString('en-GB', {
 //leaflet map
 const map = L.map('map').setView([48.2082, 16.3738], 13); 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
 //colors for the event types
 const categoryColors = {
-initiative: '#007BFF',
-protest: '#FF4136',
-pol_education: '#28a745',
-workshop: '#fd7e14',
-participation: '#6f42c1',
-election: '#ffc107',
-default: '#6c757d'
+    initiative: '#007BFF',
+    protest: '#FF4136',
+    pol_education: '#28a745',
+    workshop: '#fd7e14',
+    participation: '#6f42c1',
+    election: '#ffc107',
+    default: '#6c757d'
 };
 
 //colors for the recurring type
 const recurringColors = {
-one_time: '#666',
-daily: '#1abc9c',
-weekly: '#9b59b6',
-monthly: '#e67e22'
+    one_time: '#666',
+    daily: '#1abc9c',
+    weekly: '#9b59b6',
+    monthly: '#e67e22'
 };
 
 //setup for the functions
@@ -79,7 +79,7 @@ function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
         <strong>${props.title}</strong><br>
         <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>
         <span style="color:${color}; font-weight:bold;">${category}</span><br>
-        <!-- ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''} -->
+         ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''}
         ${props.weblink ? `<a href="${props.weblink}" target="_blank">🔗 More info</a><br>` : ''}
         ${props.description ? `<p>${props.description}</p>` : ''}
     `);

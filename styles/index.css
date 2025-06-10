@@ -14,11 +14,14 @@ header div {
 #map, #calendar {
   background: white;
   border-radius: 8px;
-  padding: 1rem;
   width: 45%;
   min-width: 300px;
   height: 500px;
   box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+#calendar{
+  padding: 1rem;
 }
 
 #controls {
