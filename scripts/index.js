@@ -1,6 +1,14 @@
 const user = localStorage.getItem('currentUser');
 const nav = document.getElementById('navbar');
 
+let users = JSON.parse(localStorage.getItem('users')) || [];
+const adminExists = users.some(u => u.username === 'admin');
+if (!adminExists) {
+    window.alert("Hello! Our site utilizes LocalStorage as a replacement for an actual database. This is to store the users and added events.");
+    users.push({ username: 'admin', password: 'admin123' });
+    localStorage.setItem('users', JSON.stringify(users));
+}
+
 // for the navbar, checks if user is logged in as admin, as user or not at all and chages the links displayed based on that
 if (user === 'admin') { 
 nav.innerHTML = `
