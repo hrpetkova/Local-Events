@@ -93,8 +93,18 @@ header div {
 }
 
 
-
-.fc .fc-daygrid-day-frame {
-  min-width: 50px;
+#dateRangeContainer {
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
 }
 
+#dateRangeContainer input[type="date"] {
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
