@@ -208,6 +208,14 @@ fetch('data/events.geojson')
     const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
         initialView: 'dayGridMonth',
         events: allEvents,
+        eventTimeFormat: {
+        hour: '2-digit',
+        minute: '2-digit',
+        meridiem: true,
+        displayEventTime: true,
+        displayEventEnd: false,
+ 
+       },
         //if an event in the calendar is clicked the map zoomes and displays the event
         eventClick: function(info) {
             const marker = markerById[info.event.id];
