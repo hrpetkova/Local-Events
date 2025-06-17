@@ -35,11 +35,11 @@ header div {
   justify-content: center;
   gap: 1rem;
   padding: 0.5rem 1rem;
-  background: #fff;
-  border-radius: 8px;
-  margin: 0.5rem auto;
-  max-width: 850px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  margin: 1rem auto;
+  background: #fffaf5;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  max-width: 1400px;
 }
 
 #controls::before, #recurringControls::before {
@@ -87,6 +87,11 @@ header div {
   display: flex;
   flex-direction: column;
 }
+
+.fc .fc-daygrid-day-frame {
+  min-width: 50px;
+}
+
 
 
 .fc .fc-daygrid-day-frame {
