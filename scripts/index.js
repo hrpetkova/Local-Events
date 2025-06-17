@@ -13,16 +13,19 @@ if (!adminExists) {
 if (user === 'admin') { 
 nav.innerHTML = `
     <a href="index.html">Home</a> |
+    <a href="pages/about.html">About us</a> |
     <a href="pages/admin.html">Admin Panel</a> |
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else if (user) {
 nav.innerHTML = `
     <a href="index.html">Home</a> |
+    <a href="pages/about.html">About us</a> |
     <a href="pages/user.html">User Panel</a> |
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else {
 nav.innerHTML = `
     <a href="index.html">Home</a> |
+    <a href="pages/about.html">About us</a> |
     <a href="pages/login.html">Login</a> |
     <a href="pages/register.html">Register</a>`;
 }
