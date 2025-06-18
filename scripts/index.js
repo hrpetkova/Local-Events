@@ -270,7 +270,6 @@ fetch('data/events.geojson')
         meridiem: true,
         displayEventTime: true,
         displayEventEnd: false,
- 
        },
         //if an event in the calendar is clicked the map zoomes and displays the event
         eventClick: function(info) {

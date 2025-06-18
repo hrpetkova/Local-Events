@@ -1,3 +1,8 @@
+html, body, #map {
+    height: 100%;
+    width: 100vw;
+}
+
 p {
   margin: 0; 
   font-size: 0.85rem; 
@@ -29,71 +34,12 @@ header div {
   margin: 0;
   background: #f2f2f2;
   overflow: hidden;
-  height:100%;
   position:relative;
-
   display: flex;
   flex-direction: row;
   height: 100vh;
   width: 100vw;
 }
-
-/* HIER FUNKTIONIERT ETWAS NOCH NICHT
-#buttonFilter{
-  display:block;
-  height: 50px;
-  width: 50px;
-  background: white;
-  border: 2px solid black;
-  top: 50px;
-  left: 50px;
-  z-index: 9999;
-}
-*/
-
-#buttonFilter {
-  position: absolute; /* ensure it sits over the map */
-  top: 50px;
-  left: 50px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  background: white;
-  padding: 0.5rem;
-  border: 2px solid black;
-  border-radius: 8px;
-}
-
-#buttonFilter button {
-  font-size: 0.8rem;
-  padding: 0.3rem 0.5rem;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 4px;
-}
-
-html, body, #map {
-    height: 100%;
-    width: 100vw;
-}
-
-/*
-#map{
-    height: 100%;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-}
-
-
-#calendar {
-  padding: 1rem;
-  display: flex;
-  height: auto; 
-}
-*/
 
 #map {
   width: 75%;
@@ -108,6 +54,49 @@ html, body, #map {
   background-color: #fff;
   overflow-y: auto;
   border-left: 1px solid #ccc;
+}
+
+/*
+#buttonFilter {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+  */
+#buttonFilter {
+  position: absolute;
+  top: 50px;
+  right: 26vw;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem;
+  border: 2px solid black;
+  border-radius: 8px;
+  transition: right 0.3s ease;
+}
+
+#buttonFilter button {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+}
+
+#toggleFilters img{
+  height: 1.4rem; 
+  width: 1.4rem;
 }
 
 #controls {
@@ -212,5 +201,17 @@ html, body, #map {
     height: 40vh; /* 40% height of screen */
     border-left: none;
     border-top: 1px solid #ccc;
+  }
+
+    #buttonFilter {
+    right: 15vw; /* closer to calendar on smaller screens */
+    top: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  #buttonFilter {
+    right: 5vw;
+    top: 30px;
   }
 }
