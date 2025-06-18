@@ -170,6 +170,27 @@ header div {
   border: 1px solid #ccc;
   font-size: 0.95rem;
 }
+/* THE ATTRIBUTION OF THE LEAFLET MAP IS MISSING!
+.leaflet-control-attribution {
+  display: block !important; 
+  opacity: 1   !important;
+  visibility: visible !important;
+}
+
+.custom-attribution{
+  position:absolute;
+  right:1.25rem;
+  bottom:1.25rem;
+  padding:0.15rem 0.4rem;
+  font-size:0.75rem;
+  background:rgba(255,255,255,0.85);
+  border:1px solid #ccc;
+  border-top-left-radius:4px;
+  line-height:1;
+  pointer-events:none;
+  z-index:400;  
+}
+*/
 
 @media (max-width: 768px) {
   #mapContainer  {
@@ -178,18 +199,18 @@ header div {
 
   #map {
     width: 100%;
-    height: 60vh; /* 60% height of screen */
+    height: 60vh;
   }
 
   #calendar {
     width: 100%;
-    height: 40vh; /* 40% height of screen */
+    height: 40vh; 
     border-left: none;
     border-top: 1px solid #ccc;
   }
 
     #buttonFilter {
-    right: 15vw; /* closer to calendar on smaller screens */
+    right: 15vw; 
     top: 40px;
   }
 }
