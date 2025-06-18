@@ -12,18 +12,21 @@ if (!adminExists) {
 // for the navbar, checks if user is logged in as admin, as user or not at all and chages the links displayed based on that
 if (user === 'admin') { 
 nav.innerHTML = `
-    <a href="index.html">Home</a> |
-    <a href="pages/admin.html">Admin Panel</a> |
+    <a href="index.html">Home</a> 
+    <a href="pages/about.html">About</a>
+    <a href="pages/admin.html">Admin Panel</a> 
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else if (user) {
 nav.innerHTML = `
-    <a href="index.html">Home</a> |
-    <a href="pages/user.html">User Panel</a> |
+    <a href="index.html">Home</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/user.html">User Panel</a> 
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else {
 nav.innerHTML = `
-    <a href="index.html">Home</a> |
-    <a href="pages/login.html">Login</a> |
+    <a href="index.html">Home</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/login.html">Login</a> 
     <a href="pages/register.html">Register</a>`;
 }
 
@@ -51,14 +54,69 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 //colors for the event types
 const categoryColors = {
-    initiative: '#007BFF',
-    protest: '#FF4136',
-    pol_education: '#28a745',
-    workshop: '#fd7e14',
-    participation: '#6f42c1',
-    election: '#ffc107',
+    initiative: '#84953d',
+    protest: '#c23b3a',
+    pol_education: '#437f97',
+    workshop: '#e5ac2f',
+    participation: '#8f395a',
+    election: '#2d3e59',
     default: '#6c757d'
 };
+
+//Create Marker Icons
+
+const initiativeMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerInitiative.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+const protestMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerProtest.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+const pol_educationMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerPolEducation.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+const workshopMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerWorkshop.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+const participationMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerParticipation.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+const electionMarker = L.icon({
+    iconUrl: '/assets/icons/markers/MarkerElection.png',
+    iconSize: [22, 34],
+    iconAnchor: [11, 34],
+    popupAnchor: [10, 0],
+});
+
+
+//Markers for the event types
+const categoryIcons = {
+    initiative: initiativeMarker,
+    protest: protestMarker,
+    pol_education: pol_educationMarker,
+    workshop: workshopMarker,
+    participation: participationMarker,
+    election: electionMarker,
+}
 
 //colors for the recurring type
 const recurringColors = {
@@ -77,12 +135,11 @@ let markerById = {};
 
 //the main function: responsible for parsing the data from the geojson to the map and the calendar
 function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
+    const markerIcon = categoryIcons[category];
+    //const markerIcon = categoryIcons.initiative;
     const color = categoryColors[category] || categoryColors.default;
-    const marker = L.circleMarker([coords[0], coords[1]], {
-        radius: 7,
-        color: color,
-        fillColor: color,
-        fillOpacity: 0.85
+    const marker = new L.Marker([coords[0], coords[1]], {
+        icon: markerIcon
     }).bindPopup(`
         <strong>${props.title}</strong><br>
         <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>

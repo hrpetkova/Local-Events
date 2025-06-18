@@ -1,16 +1,19 @@
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'SourceCodeProRegular', sans-serif;
   margin: 0;
-  background: #e8f5e9;
-  color: #7d6e2e;
+  background-color: #f0f0f0;
+  color: white;
+  overflow: auto;
 }
 
 header {
-  background: #7d6e2e;
-  color: white;
-  padding: 1rem;
+  background: white;
+  color: black;
+  padding: 2rem;
+  margin: 2rem;
   text-align: center;
-  font-family: 'Fredoka', cursive;
+  font-family: 'SourceCodeProRegular', sans-serif;
+  max-width: 90%;
 }
 
 header h1 {
@@ -25,23 +28,31 @@ header h1 {
   gap: 1rem;
   background: #ffffff;
   padding: 1rem;
-  box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
 
-.toolbar button, .toolbar select {
+.toolbar .toolbar select {
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #7d6e2e;
-  color: white;
+  border: 1px solid black;
+  background: white;
+  color: black;
   font-weight: bold;
   cursor: pointer;
 }
 
+button{
+  border-radius: 2px;
+  border: 1px solid black;
+  background: white;
+  margin-top: 1rem;
+  margin-left: 2rem;
+  cursor: pointer;  
+}
+
 .toolbar select {
   background: white;
-  color: #7d6e2e;
-  border-color: #a5d6a7;
+  color: black;
+  border-color: black;
 }
 
 .container {
@@ -50,14 +61,13 @@ header h1 {
   background: white;
   border-radius: 10px;
   padding: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .event {
-  border-left: 5px solid #66bb6a;
+  border-left: 5px solid black;
   padding: 1rem;
   margin: 1rem 0;
-  background: #f1f8e9;
+  background: white;
   border-radius: 6px;
 }
 
@@ -84,15 +94,30 @@ header h1 {
   display: inline-block;
 }
 
+#summaryCounts{
+  color: black;
+  margin: 2rem;
+}
+
+#statusFilter{
+  color: black;
+  margin-left: 2rem;
+}
+
+label{
+  color: black;
+  margin-left: 2rem;
+}
+
 .status.pending { background: #ffc107; }
 .status.approved { background: #28a745; }
 .status.rejected { background: #dc3545; }
 
 #map {
   height: 400px;
-  margin-top: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  margin: 2rem;
+  border: 1px solid black;
+  border-radius: 4px;
 }
 
 form {
@@ -107,7 +132,7 @@ form input, form textarea, form select, form button {
   font-size: 1rem;
 }
 form button {
-  background-color: #7d6e2e;
-  color: white;
+  background-color: white;
+  color: black;
   font-weight: bold;
 }

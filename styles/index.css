@@ -6,22 +6,54 @@ p {
 
 header div {
   display:flex; 
-  justify-content:space-between; 
-  align-items:center; 
-  padding: 0 1rem;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
 }
 
-#map, #calendar {
+#mainlogo {
+  height: 1.8rem;
+  width: 1.8rem;
+  padding: 1rem;
+}
+
+#headline {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+#mapContainer {
+  font-family: 'SourceCodeProRegular', sans-serif;
+  padding: 0;
+  margin: 0;
+  background: #f2f2f2;
+  overflow: hidden;
+  height:100%;
+  position:relative;
+}
+
+/* HIER FUNKTIONIERT ETWAS NOCH NICHT*/
+#buttonFilter{
+  display:block;
+  height: 50px;
+  width: 50px;
   background: white;
-  border-radius: 8px;
-  width: 45%;
-  min-width: 300px;
-  height: 500px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  border: 2px solid black;
+  top: 50px;
+  left: 50px;
+  z-index: 9999;
+}
+
+
+html, body, #map {
+    height: 100%;
+    width: 100vw;
 }
 
 #calendar{
   padding: 1rem;
+  display:none;
 }
 
 #controls {
@@ -40,6 +72,7 @@ header div {
   margin: 0.5rem auto;
   max-width: 850px;
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
+  display: none;
 }
 
 #controls::before, #recurringControls::before {
@@ -50,7 +83,9 @@ header div {
   color: #333;
   text-align: left;
   margin-bottom: 0.2rem;
-  font-family: 'Fredoka', cursive;
+  font-family: 'SourceCodeProRegular';
+  font-weight: normal;
+  font-style: normal; 
 }
 
 #controls label, #recurringControls label {

@@ -21,7 +21,7 @@ document.getElementById('eventForm').addEventListener('submit', function(e) {
   const lastId = parseInt(localStorage.getItem('lastEventId') || "0");
   const newId = lastId + 1; //to add a new event the id is increased by 1
 
-  //the fields of the eevent
+  //the fields of the event
   const newEvent = {
     objectId: newId,
     title: document.getElementById('title').value,

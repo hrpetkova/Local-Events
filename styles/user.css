@@ -1,18 +1,21 @@
 body { 
-  font-family: Arial, sans-serif; 
+  font-family: 'SourceCodeProRegular', sans-serif; 
   padding: 2rem; 
   background: #f4f4f4; 
+  overflow: auto;
 }
 
 header { 
-  background: #1e4b91; 
-  color: white; 
-  padding: 1rem; 
-  border-radius: 6px; 
+  background: white; 
+  color: black; 
+  padding: 2rem; 
+  border: 1px solid black;
+  border-radius: 4px;
   margin-bottom: 2rem; 
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
+  max-width: 95%;
 }
 
 .main-grid { 
@@ -25,9 +28,13 @@ form, #previewMap, .event-list {
   flex: 1; 
   min-width: 300px; 
   background: white; 
-  border-radius: 6px; 
-  padding: 1rem; 
-  box-shadow: 0 0 5px rgba(0,0,0,0.1); 
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 2rem; 
+}
+
+.event-list{
+  margin-top: 2rem;
 }
 
 input, select, textarea, button { 
@@ -38,10 +45,10 @@ input, select, textarea, button {
 }
 
 button { 
-  background: #1e4b91; 
-  color: white; 
-  border: none; 
-  border-radius: 4px; 
+  background: white; 
+  color: black; 
+  border: 1px solid black;
+  border-radius: 4px;
   cursor: pointer; 
 }
 

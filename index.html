@@ -4,31 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Public Civic Events</title>
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="styles/index.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
+  <link rel="stylesheet" href="styles/style.css"/>
+  <link rel="stylesheet" href="styles/index.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" media="screen" href="https://fontlibrary.org/en/face/source-code-pro" type="text/css"/> 
 </head>
 
 <body>
   <header>
     <div>
-      <h1>Public Civic Events Map</h1>
+      <div id="headline">
+        <img id="mainlogo" src="assets/icons/logo_small.png" alt="Logo">
+        <h1>Local Civic Engagement Map Vienna</h1>
+      </div>
       <nav id="navbar"></nav>  <!-- handeled by JS -->
     </div>
-    <p>Loaded from localStorage (approved events) & events.geojson</p>
   </header>
 
   <div id="controls"></div> <!-- the filter controls for type of event -->
   <div id="recurringControls"></div> <!-- the filter controls for frequency of event -->
-  <div class="container">
+  <div id="mapContainer">
     <div id="map"></div> <!-- leaflet map -->
-    <div id="calendar"></div> <!-- calendar.io -->
+    <div id="buttonFilter"></div>
   </div>
+    <div id="calendar"></div> <!-- calendar.io -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
   <script src="scripts/index.js"></script>
 </body>
 </html>

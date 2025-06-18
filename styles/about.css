@@ -1,0 +1,36 @@
+p {
+  margin: 0; 
+  font-size: 0.85rem; 
+  text-align: left;
+  padding: 2rem;
+}
+
+main h1, h2 {
+    padding-left: 2rem;
+
+}
+
+header div {
+  display:flex; 
+  justify-content: left; 
+  align-items: center; 
+  width: 100%;
+}
+
+#mainlogo {
+  height: 1.8rem;
+  width: 1.8rem;
+  padding: 1rem;
+}
+
+#headline {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+
+}
+
+nav {
+    white-space: nowrap;
+    margin-right: 2rem;
+}
