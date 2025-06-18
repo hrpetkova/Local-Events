@@ -66,45 +66,45 @@ const categoryColors = {
 //Create Marker Icons
 
 const initiativeMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerInitiative.png',
+    iconUrl: 'assets/icons/markers/MarkerInitiative.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const protestMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerProtest.png',
+    iconUrl: 'assets/icons/markers/MarkerProtest.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const pol_educationMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerPolEducation.png',
+    iconUrl: 'assets/icons/markers/MarkerPolEducation.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const workshopMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerWorkshop.png',
+    iconUrl: 'assets/icons/markers/MarkerWorkshop.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const participationMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerParticipation.png',
+    iconUrl: 'assets/icons/markers/MarkerParticipation.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const electionMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerElection.png',
+    iconUrl: 'assets/icons/markers/MarkerElection.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 
@@ -187,6 +187,8 @@ storedEvents.filter(e => e.status === 'approved').forEach(e => {
     addEventToMapAndCalendar(e, e.coords, category);
 });
 
+let calendar;
+
 //actually grab the data from the geojson and integrate them with the filter functions 
 fetch('data/events.geojson')
 .then(res => res.json())
@@ -259,7 +261,7 @@ fetch('data/events.geojson')
     }
 
     //intializing the calendar view
-    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+    calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
         initialView: 'dayGridMonth',
         events: allEvents,
         eventTimeFormat: {
@@ -279,7 +281,16 @@ fetch('data/events.geojson')
             }
         }
     });
-
-    //display the calendar
     calendar.render();
+});
+
+// toggle button
+const toggleFiltersBtn = document.getElementById('toggleFilters');
+
+toggleFiltersBtn.addEventListener('click', () => {
+    const controls = document.getElementById('controls');
+    const recurringControls = document.getElementById('recurringControls');
+    const visible = controls.style.display === 'flex';
+    controls.style.display = visible ? 'none' : 'flex';
+    recurringControls.style.display = visible ? 'none' : 'flex';
 });
