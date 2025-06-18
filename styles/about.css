@@ -1,5 +1,5 @@
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'SourceCodeProRegular', sans-serif; 
   margin: 0;
   background: #f9f8f6;
   color: #333;
@@ -9,7 +9,6 @@ header {
   background-color: #f7c9a9;
   padding: 1.5rem 2rem;
   text-align: center;
-  font-family: 'Fredoka', cursive;
 }
 
 header h1 {
@@ -58,7 +57,6 @@ main {
 }
 
 h2 {
-  font-family: 'Fredoka', cursive;
   color: #444;
   margin-top: 2rem;
   text-align: center;
