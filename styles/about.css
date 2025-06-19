@@ -34,3 +34,12 @@ nav {
     white-space: nowrap;
     margin-right: 2rem;
 }
+
+body, html {
+  height: auto ;
+  overflow-y: auto ;
+}
+
+section {
+  display: block;
+}
