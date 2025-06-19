@@ -11,24 +11,43 @@ if (!adminExists) {
 
 // for the navbar, checks if user is logged in as admin, as user or not at all and chages the links displayed based on that
 if (user === 'admin') { 
-nav.innerHTML = `
+  nav.innerHTML = `
     <a href="index.html">Home</a> 
     <a href="pages/about.html">About</a>
     <a href="pages/admin.html">Admin Panel</a> 
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else if (user) {
-nav.innerHTML = `
+  nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="pages/about.html">About</a>
     <a href="pages/user.html">User Panel</a> 
     <a href="#" onclick="logout()">Logout (${user})</a>`;
 } else {
-nav.innerHTML = `
+  nav.innerHTML = `
     <a href="index.html">Home</a>
     <a href="pages/about.html">About</a>
     <a href="pages/login.html">Login</a> 
     <a href="pages/register.html">Register</a>`;
 }
+
+const LABELS = {
+  type: {
+    initiative: "Initiative",
+    protest: "Protest",
+    pol_education: "Political Education",
+    workshop: "Workshop",
+    participation: "Participation",
+    election: "Election"
+  },
+  recurring: {
+    one_time: "One‑Time",
+    daily: "Daily",
+    weekly: "Weekly",
+    monthly: "Monthly",
+    initiative: "Initiative" // used for special recurring case
+  }
+};
+const getLabel = (cat, val) => LABELS[cat]?.[val] ?? val;
 
 //logout function goes to login page
 function logout() { 
@@ -52,6 +71,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+map.attributionControl.setPosition("bottomleft");
+
+// after you create the map
+function setAttrPos () {
+  map.attributionControl.setPosition(
+    window.innerWidth < 768 ? 'bottomright' : 'bottomleft'
+  );
+}
+setAttrPos();                 // initial
+window.addEventListener('resize', setAttrPos);  // respond to viewport changes
+
+
 //colors for the event types
 const categoryColors = {
     initiative: '#84953d',
@@ -66,45 +97,45 @@ const categoryColors = {
 //Create Marker Icons
 
 const initiativeMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerInitiative.png',
+    iconUrl: 'assets/icons/markers/MarkerInitiative.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const protestMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerProtest.png',
+    iconUrl: 'assets/icons/markers/MarkerProtest.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const pol_educationMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerPolEducation.png',
+    iconUrl: 'assets/icons/markers/MarkerPolEducation.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const workshopMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerWorkshop.png',
+    iconUrl: 'assets/icons/markers/MarkerWorkshop.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const participationMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerParticipation.png',
+    iconUrl: 'assets/icons/markers/MarkerParticipation.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 const electionMarker = L.icon({
-    iconUrl: '/assets/icons/markers/MarkerElection.png',
+    iconUrl: 'assets/icons/markers/MarkerElection.png',
     iconSize: [22, 34],
     iconAnchor: [11, 34],
-    popupAnchor: [10, 0],
+    popupAnchor: [0, -34],
 });
 
 
@@ -138,15 +169,24 @@ function addEventToMapAndCalendar(props, coords, category, idSource = 'LS') {
     const markerIcon = categoryIcons[category];
     //const markerIcon = categoryIcons.initiative;
     const color = categoryColors[category] || categoryColors.default;
+    const recurringKey = props.reccuring || 'one_time';
     const marker = new L.Marker([coords[0], coords[1]], {
         icon: markerIcon
-    }).bindPopup(`
+    })/*.bindPopup(`
         <strong>${props.title}</strong><br>
         <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>
         <span style="color:${color}; font-weight:bold;">${category}</span><br>
          ${props.reccuring ? `<em>(${props.reccuring})</em><br>` : ''}
         ${props.weblink ? `<a href="${props.weblink}" target="_blank">🔗 More info</a><br>` : ''}
         ${props.description ? `<p>${props.description}</p>` : ''}
+    `);*/
+        .bindPopup(`
+      <strong>${props.title}</strong><br>
+      <em style="color:gray">${formatDate(props.timestamp_start)} → ${formatDate(props.timestamp_end)}</em><br>
+      <span style="color:${color}; font-weight:bold;">${getLabel("type", category)}</span><br>
+      ${recurringKey ? `<em>(${getLabel("recurring", recurringKey)})</em><br>` : ""}
+      ${props.weblink ? `<a href="${props.weblink}" target="_blank">🔗 More info</a><br>` : ""}
+      ${props.description ? `<p>${props.description}</p>` : ""}
     `);
 
     marker.featureCategory = category;
@@ -187,6 +227,8 @@ storedEvents.filter(e => e.status === 'approved').forEach(e => {
     addEventToMapAndCalendar(e, e.coords, category);
 });
 
+let calendar;
+
 //actually grab the data from the geojson and integrate them with the filter functions 
 fetch('data/events.geojson')
 .then(res => res.json())
@@ -213,7 +255,7 @@ fetch('data/events.geojson')
 
         const label = document.createElement('label');
         label.htmlFor = `cat-${cat}`;
-        label.innerHTML = `<span style="color:${categoryColors[cat] || categoryColors.default};">⬤</span> ${cat}`;
+        label.innerHTML = `<span style="color:${categoryColors[cat] || categoryColors.default};">⬤</span> ${getLabel("type", cat)}`;
 
         checkbox.addEventListener('change', updateFilters);
         controlDiv.appendChild(checkbox);
@@ -230,7 +272,7 @@ fetch('data/events.geojson')
 
         const label = document.createElement('label');
         label.htmlFor = `rec-${rec}`;
-        label.innerHTML = `<span style="color:${recurringColors[rec] || '#999'};"><!--■--></span> ${rec}`;
+        label.innerHTML = `<span style="color:${recurringColors[rec] || "#999"};"></span> ${getLabel("recurring", rec)}`;
 
         checkbox.addEventListener('change', updateFilters);
         recurringDiv.appendChild(checkbox);
@@ -259,8 +301,9 @@ fetch('data/events.geojson')
     }
 
     //intializing the calendar view
-    const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-        initialView: 'dayGridMonth',
+    calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+        //initialView: 'dayGridMonth',
+        initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth', windowResize: function(view) {calendar.changeView(window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth');  },
         events: allEvents,
         eventTimeFormat: {
         hour: '2-digit',
@@ -268,7 +311,6 @@ fetch('data/events.geojson')
         meridiem: true,
         displayEventTime: true,
         displayEventEnd: false,
- 
        },
         //if an event in the calendar is clicked the map zoomes and displays the event
         eventClick: function(info) {
@@ -279,7 +321,17 @@ fetch('data/events.geojson')
             }
         }
     });
-
-    //display the calendar
     calendar.render();
 });
+
+// toggle button
+const toggleFiltersBtn = document.getElementById('toggleFilters');
+
+toggleFiltersBtn.addEventListener('click', () => {
+    const controls = document.getElementById('controls');
+    const recurringControls = document.getElementById('recurringControls');
+    const visible = controls.style.display === 'flex';
+    controls.style.display = visible ? 'none' : 'flex';
+    recurringControls.style.display = visible ? 'none' : 'flex';
+});
+

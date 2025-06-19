@@ -7,6 +7,7 @@
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
   <link rel="stylesheet" href="styles/style.css"/>
   <link rel="stylesheet" href="styles/index.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" media="screen" href="https://fontlibrary.org/en/face/source-code-pro" type="text/css"/> 
 </head>
@@ -22,15 +23,21 @@
     </div>
   </header>
 
-  <div id="controls"></div> <!-- the filter controls for type of event -->
-  <div id="recurringControls"></div> <!-- the filter controls for frequency of event -->
   <div id="mapContainer">
     <div id="map"></div> <!-- leaflet map -->
-    <div id="buttonFilter"></div>
-  </div>
+    <div id="buttonFilter">
+      <button id="toggleFilters" title="Toggle Filters">
+        <img src="assets/icons/filter.png" alt="Filter"/>
+      </button>
+      <div id="controls"></div> <!-- the filter controls for type of event -->
+      <div id="recurringControls"></div> <!-- the filter controls for frequency of event -->
+    </div>
     <div id="calendar"></div> <!-- calendar.io -->
+  </div>
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script src="scripts/index.js"></script>
 </body>
 </html>
+
