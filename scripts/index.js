@@ -71,12 +71,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-map.attributionControl.setPosition("bottomleft");
+map.attributionControl.setPosition("topright");
 
 // after you create the map
 function setAttrPos () {
   map.attributionControl.setPosition(
-    window.innerWidth < 768 ? 'bottomright' : 'bottomleft'
+    window.innerWidth < 768 ? 'bottomright' : 'topright'
   );
 }
 setAttrPos();                 // initial
