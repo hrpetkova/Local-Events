@@ -33,7 +33,6 @@ header div {
   padding: 0;
   margin: 0;
   background: #f2f2f2;
-  overflow: hidden;
   position:relative;
   display: flex;
   flex-direction: row;
@@ -170,31 +169,18 @@ header div {
   border: 1px solid #ccc;
   font-size: 0.95rem;
 }
-/* THE ATTRIBUTION OF THE LEAFLET MAP IS MISSING!
-.leaflet-control-attribution {
-  display: block !important; 
-  opacity: 1   !important;
-  visibility: visible !important;
-}
 
-.custom-attribution{
-  position:absolute;
-  right:1.25rem;
-  bottom:1.25rem;
-  padding:0.15rem 0.4rem;
-  font-size:0.75rem;
-  background:rgba(255,255,255,0.85);
-  border:1px solid #ccc;
-  border-top-left-radius:4px;
-  line-height:1;
-  pointer-events:none;
-  z-index:400;  
+.leaflet-control-attribution {
+  background: rgba(255,255,255,.85);
+  padding: 2px 6px;
+  border-radius: 3px;
+  z-index: 9999;
 }
-*/
 
 @media (max-width: 768px) {
   #mapContainer  {
     flex-direction: column;
+    overflow: visible;
   }
 
   #map {
@@ -213,11 +199,35 @@ header div {
     right: 15vw; 
     top: 40px;
   }
+
+  #navbar {
+    z-index: 9999;
+    top: 100%;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  #navbar a {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  #navbar.active {
+    display: flex;
+  }
 }
 
-@media (max-width: 600px) {
-  #buttonFilter {
-    right: 5vw;
-    top: 30px;
+@media (min-width: 768px) {
+  .leaflet-control-attribution {
+    right: auto;      /* ignore default right offset */
+    left: 4px;        /* hug the left edge */
+    transform: none;  /* cancel any earlier tweaks */
+    position: absolute;
+    z-index: 9999999  ;
   }
 }
